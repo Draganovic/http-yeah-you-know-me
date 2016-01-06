@@ -1,10 +1,8 @@
 require 'socket'
 
-
-
-def response(client,msg,status = nil)
-time = Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')
-puts "Sending response."
+def response(client,msg,status= nil)
+time = Time.now.strftime('%I:%M %p on %A, %B %e, %Y')
+# puts "Sending response."
 response = "<pre>" + msg.to_s + "</pre>"
 output = "<html><head></head><body>#{response}</body></html>"
 headers = ["http/1.1 #{status}",
@@ -15,11 +13,7 @@ headers = ["http/1.1 #{status}",
 client.puts headers
 client.puts output
 
-puts ["Wrote this response:", headers, output].join("\n")
 end
-
-
-
 
 tcp_server = TCPServer.new(9292)
 client = tcp_server.accept
@@ -32,8 +26,8 @@ while line = client.gets and !line.chomp.empty?
 end
   counter +=1
 
-puts "Got this request:"
-puts request_lines.inspect
+puts "******************Got this request:*******************"
+request_lines.inspect
 print "\n"
 
 d = {}	#hash containing request diagnostic info
@@ -53,20 +47,20 @@ request_lines.each.with_index{ |req,index|
 case d['Path']
 	when '/'
 		puts '/ detected'
-		response(client,'/ detected')
+		response(client, d.collect{ |k,v| "#{k}: #{v}" }.join("\n"))
 	when '/hello'
 		puts '/hello detected'
 		response(client, "/hello #{counter}")
 	when '/datetime'
 		puts '/datetime detected'
-		response(client, Time.now.strftime('%a, %e %b %Y %H:%M:%S %z'))
+		response(client, Time.now.strftime('%I:%M %p on %A, %B %e, %Y'))
 	when '/shutdown'
 		puts '/shutdown detected'
-		response(client, '/shutdown detected')
+		response(client, "/Total Requests : #{counter}")
     exit
 	else
 		puts "#{d['Path']} is an unknown command"
-		response(client, "unknown command, #{d['Path']} detected",STATUS_NOTFOUND)
+		response(client, "unknown command, #{d['Path']} detected",nil)
 end
 
 
