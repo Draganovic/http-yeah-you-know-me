@@ -1,26 +1,30 @@
 require 'socket'
 
-#Constants
+class Constants
 STATUS_OK = '200 OK'
 STATUS_MOVED = '301 Moved Permanently'
 STATUS_UNAUTH = '401 Unauthorized'
 STATUS_FORB = '403 Forbidden'
 STATUS_NOTFOUND = '404 Not Found'
 STATUS_ERROR = '500 Internal Server Error'
+end
 
+class Response < Constants
+
+end
 
 def response(client,msg,status=STATUS_OK)
-time = Time.now.strftime('%I:%M %p on %A, %B %e, %Y')
-response = "<pre>" + msg.to_s + "</pre>"
-output = "<html><head></head><body>#{response}</body></html>"
-headers = ["http/1.1 #{status}",
-  "date: #{time}",
-  "server: ruby",
-  "content-type: text/html; charset=iso-8859-1",
-  "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-  client.puts headers
-  client.puts output
-  client.close
+  time = Time.now.strftime('%I:%M %p on %A, %B %e, %Y')
+  response = "<pre>" + msg.to_s + "</pre>"
+  output = "<html><head></head><body>#{response}</body></html>"
+  headers = ["http/1.1 #{status}",
+    "date: #{time}",
+    "server: ruby",
+    "content-type: text/html; charset=iso-8859-1",
+    "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    client.puts headers
+    client.puts output
+    client.close
 end
 
 if __FILE__ == $0
@@ -79,6 +83,6 @@ if __FILE__ == $0
   end
 
   end
-  #client.close
+  client.close
 
 end
