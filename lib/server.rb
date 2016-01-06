@@ -1,6 +1,6 @@
 require 'socket'
 
-def response(client,msg,status= nil)
+def response(client,msg,status=nil)
 time = Time.now.strftime('%I:%M %p on %A, %B %e, %Y')
 # puts "Sending response."
 response = "<pre>" + msg.to_s + "</pre>"
@@ -27,7 +27,7 @@ end
   counter +=1
 
 puts "******************Got this request:*******************"
-request_lines.inspect
+
 print "\n"
 
 d = {}	#hash containing request diagnostic info
@@ -41,6 +41,12 @@ request_lines.each.with_index{ |req,index|
 		line_elements = req.split(':')
 		d[line_elements[0].strip] = line_elements[1].strip
 	end
+}
+#output diagnostic info
+print "\n*********** DEBUG INFO ************\n"
+
+d.each{|key,val|
+	puts "#{key}: #{val}"
 }
 
 #process request
@@ -62,14 +68,6 @@ case d['Path']
 		puts "#{d['Path']} is an unknown command"
 		response(client, "unknown command, #{d['Path']} detected",nil)
 end
-
-
-#output diagnostic info
-print "\n*********** DEBUG INFO ************\n"
-
-d.each{|key,val|
-	puts "#{key}: #{val}"
-}
 
 end
 client.close
