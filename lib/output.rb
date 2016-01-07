@@ -13,15 +13,18 @@ class Output
   end
 
   def self.word_finder(client,request)
-    @word = request['Path'].split("=")[1]
+    h={};/\?(.*)/ =~ request['Path']; $1.split('&').each{ |v| kv = v.split('='); h[kv[1]] = kv[0] }; h
+    msg = ''
     contents = File.readlines('/usr/share/dict/words').map(&:chomp!)
-    x = contents.one? {|w| w == @word}
-    p x
-    if x == true
-    response(client, "#{@word.upcase} is a known word")
-    else
-    response(client, "#{@word.upcase} is not a known word")
-    end
+    h.each{ |word,parm|
+      next unless param.downcase == 'word'
+      x = contents.one? {|w| w == word}
+      if x == true
+        msg += "#{word.upcase} is a known word\n"
+      else
+        msg += "#{word.upcase} is not a known word\n"
+      end
+    }
+    response(client,msg)
   end
-
 end

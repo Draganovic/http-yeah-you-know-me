@@ -56,13 +56,21 @@ class Processor
       end
 
       response(client,msg,status)
+    when '/new_game'
+      @game.has_game?(client,request)
+    when '/force_error'
+      begin
+        raise "an error!"
+      rescue => error
+        response(client,"#{error.class} and #{error.message}",STATUS_ERROR)
+      end
     when '/shutdown'
       Output.print( '/shutdown detected')
       response(client, "Total Requests : #{@counter}")
       exit
     else
       Output.print( "#{request['Path']} is an unknown command")
-      response(client, "unknown command, #{request['Path']} detected", STATUS_NOTFOUND)
+      response(client, STATUS_NOTFOUND, STATUS_NOTFOUND)
     end
 
   end
