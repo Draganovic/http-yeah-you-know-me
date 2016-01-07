@@ -1,8 +1,7 @@
 require './constants'
 require './responder'
 require './output'
-#require'parser'
-#require 'socket'
+require 'pry'
 
 
 class Processor
@@ -13,7 +12,10 @@ class Processor
   def initialize
     @counter = 0
     @hello_counter = 0
+    @output = Output.new
   end
+
+
 
   def process(client,request)#(response method, diagnostic, client, counter, constant)
     @counter +=1
@@ -24,23 +26,17 @@ class Processor
     when '/hello'
       @hello_counter +=1
       Output.print( '/hello detected')
-      response(client, "/hello #{@hello_counter}")
+      response(client, "Hello World #{@hello_counter}")
     when '/datetime'
       Output.print( '/datetime detected')
       response(client, Time.now.strftime('%I:%M %p on %A, %B %e, %Y'))
     when /^\/word_search*/
       Output.print( '^/word_search* detected')
-      #parse path to get the word
-      word = request['Path']
-
-      contents = File.readlines('/usr/share/dict/words')
-      p contents
-      #look up word
-      #return a response
+      @output.word_finder(client,request)
     when '/shutdown'
       Output.print( '/shutdown detected')
       # output_shutdown
-      response(client, "/Total Requests : #{@counter}")
+      response(client, "Total Requests : #{@counter}")
       exit
     else
       Output.print( "#{request['Path']} is an unknown command")

@@ -1,6 +1,4 @@
 require './constants'
-#require 'parser'
-#require 'socket'
 
 module Responder
   include Constants
@@ -17,4 +15,5 @@ module Responder
       client.puts output
       client.close
   end
+
 end
