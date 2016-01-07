@@ -1,23 +1,28 @@
 require 'socket'
+require './output'
 
 class Parser
+  attr_reader :diagnostic
 
   def initialize
+    @client = nil
     @diagnostic = {}	#hash containing request diagnostic info
   end
 
   def parse(client)
+    @client = client
+
     request_lines = []
-    while line = client.gets and !line.chomp.empty?
+
+    while line = @client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
 
-    populate_diagnostics(client,request_lines)
+    populate_diagnostics(request_lines)
 
-    data = client.read(@diagnostic['Content-Length'].to_i)
-    p data
     return request_lines
   end
+
   #output diagnostic info
   def print_diagnostics
     @diagnostic.each{|key,val|
@@ -25,8 +30,23 @@ class Parser
     }
   end
 
-  def populate_diagnostics(client,request_lines)
-    #put request into hash 'd'
+  def clear_diagnostics
+    @diagnostic.clear
+  end
+
+  def add_header_data
+    if @diagnostic.has_key?'Content-Length'
+      data = @client.read(@diagnostic['Content-Length'].to_i)
+      if !data.nil? && data.index('=') != nil
+         v = data.split('=')
+        @diagnostic[v[0].strip] = v[1].strip
+      end
+    end
+  end
+
+  def populate_diagnostics(request_lines)
+
+    #put request into hash '@diagnostic'
     request_lines.each.with_index{ |req,index|
       #print index, " ", req, "\n"
       if index == 0
@@ -36,16 +56,10 @@ class Parser
         @diagnostic[line_elements[0].strip] = line_elements[1].strip
       end
     }
-=begin
-    if @diagnostic.has_key?'Content-Length'
-      data = client.read(@diagnostic['Content-Length'].to_i)
-      if data.index('=') != nil
-         v = data.split('=')
-         p v
-        #@diagnostic[key] = val
-      end
-    end
-=end
+
+    #put header data into hash '@diagnostic'
+    add_header_data
+
     return @diagnostic
   end
 

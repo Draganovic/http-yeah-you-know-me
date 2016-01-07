@@ -8,7 +8,7 @@ end
 
 def start_game
   @start = 1
-  "Good luck!"
+  "Good luck! Get ready to play!"
 end
 
 

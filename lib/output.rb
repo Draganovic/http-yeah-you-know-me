@@ -4,15 +4,15 @@ require './responder'
 class Output
 
   #attr_accessor :word_finder
-  include Responder
-
+  #include Responder
+  extend Responder
 
   DEBUG = true
   def self.print(msg)
     puts msg if DEBUG == true
   end
 
-  def word_finder(client,request)
+  def self.word_finder(client,request)
     @word = request['Path'].split("=")[1]
     contents = File.readlines('/usr/share/dict/words').map(&:chomp!)
     x = contents.one? {|w| w == @word}

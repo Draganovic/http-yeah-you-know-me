@@ -13,7 +13,7 @@ class Processor
   def initialize
     @counter = 0
     @hello_counter = 0
-    @output = Output.new
+    #@output = Output.new
     @game = Game.new
   end
 
@@ -32,7 +32,8 @@ class Processor
       response(client, Time.now.strftime('%I:%M %p on %A, %B %e, %Y'))
     when /^\/word_search*/
       Output.print( '^/word_search* detected')
-      @output.word_finder(client,request)
+      #@output.word_finder(client,request)
+      Output.word_finder(client,request)
     when '/start_game'
 
       if request['Verb'].upcase == 'POST'
@@ -42,7 +43,7 @@ class Processor
         msg = "unknown Verb"
         status = STATUS_ERROR
       end
-
+        Output.print("sending response")
       response(client,msg,status)
 
     when '/game'

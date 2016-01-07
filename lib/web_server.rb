@@ -21,9 +21,10 @@ private
       #Obtain request
       request = @parser.parse(client)
       #Process request
-      @processor.process(client,@parser.populate_diagnostics(client,request))
+      @processor.process(client,@parser.diagnostic)
       #Print diagnostic info
       @parser.print_diagnostics
+      @parser.clear_diagnostics
     end
   end
 
