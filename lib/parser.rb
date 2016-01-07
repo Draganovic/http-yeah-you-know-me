@@ -12,8 +12,10 @@ class Parser
       request_lines << line.chomp
     end
 
-    populate_diagnostics(request_lines)
+    populate_diagnostics(client,request_lines)
 
+    data = client.read(@diagnostic['Content-Length'].to_i)
+    p data
     return request_lines
   end
   #output diagnostic info
@@ -23,7 +25,7 @@ class Parser
     }
   end
 
-  def populate_diagnostics(request_lines)
+  def populate_diagnostics(client,request_lines)
     #put request into hash 'd'
     request_lines.each.with_index{ |req,index|
       #print index, " ", req, "\n"
@@ -34,7 +36,16 @@ class Parser
         @diagnostic[line_elements[0].strip] = line_elements[1].strip
       end
     }
-
+=begin
+    if @diagnostic.has_key?'Content-Length'
+      data = client.read(@diagnostic['Content-Length'].to_i)
+      if data.index('=') != nil
+         v = data.split('=')
+         p v
+        #@diagnostic[key] = val
+      end
+    end
+=end
     return @diagnostic
   end
 

@@ -1,6 +1,7 @@
 require './constants'
 require './responder'
 require './output'
+require './the_game'
 require 'pry'
 
 
@@ -13,6 +14,7 @@ class Processor
     @counter = 0
     @hello_counter = 0
     @output = Output.new
+    @game = Game.new
   end
 
   def process(client,request)#(response method, diagnostic, client, counter, constant)
@@ -31,6 +33,20 @@ class Processor
     when /^\/word_search*/
       Output.print( '^/word_search* detected')
       @output.word_finder(client,request)
+    when '/start_game'
+
+      if request['Verb'].upcase == 'POST'
+        msg = @game.start_game
+        status = STATUS_OK
+      else
+        msg = "unknown Verb"
+        status = STATUS_ERROR
+      end
+
+      response(client,msg,status)
+
+    when '/game'
+
     when '/shutdown'
       Output.print( '/shutdown detected')
       response(client, "Total Requests : #{@counter}")
