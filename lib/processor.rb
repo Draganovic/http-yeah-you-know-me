@@ -8,14 +8,12 @@ class Processor
 
   include Responder
   include Constants
-  #process request
+
   def initialize
     @counter = 0
     @hello_counter = 0
     @output = Output.new
   end
-
-
 
   def process(client,request)#(response method, diagnostic, client, counter, constant)
     @counter +=1
@@ -35,12 +33,10 @@ class Processor
       @output.word_finder(client,request)
     when '/shutdown'
       Output.print( '/shutdown detected')
-      # output_shutdown
       response(client, "Total Requests : #{@counter}")
       exit
     else
       Output.print( "#{request['Path']} is an unknown command")
-      # output_unknown(diagnostic)
       response(client, "unknown command, #{request['Path']} detected", STATUS_NOTFOUND)
     end
 
