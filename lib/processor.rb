@@ -35,7 +35,6 @@ class Processor
       #@output.word_finder(client,request)
       Output.word_finder(client,request)
     when '/start_game'
-
       if request['Verb'].upcase == 'POST'
         msg = @game.start_game
         status = STATUS_OK
@@ -43,11 +42,20 @@ class Processor
         msg = "unknown Verb"
         status = STATUS_ERROR
       end
-        Output.print("sending response")
+
       response(client,msg,status)
 
     when '/game'
+      if request['Verb'].upcase == 'POST'
+        @game.post_guess(request['guess'])
+        msg = "/game"
+        status = STATUS_REDIRECT
+      else
+        msg = @game.the_game
+        status = STATUS_OK
+      end
 
+      response(client,msg,status)
     when '/shutdown'
       Output.print( '/shutdown detected')
       response(client, "Total Requests : #{@counter}")
