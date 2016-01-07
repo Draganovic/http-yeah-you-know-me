@@ -10,7 +10,7 @@ module Responder
       headers = ["http/1.1 #{status}",
         "Location: #{msg}\r\n\r\n"].join("\r\n")
         client.puts headers
-        #client.puts output
+        client.puts output
     else
     time = Time.now.strftime('%I:%M %p on %A, %B %e, %Y')
     response = "<pre>" + msg.to_s + "</pre>"
