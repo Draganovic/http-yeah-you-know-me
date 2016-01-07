@@ -27,12 +27,14 @@ if __FILE__ == $0
   tcp_server = TCPServer.new(9292)
   client = tcp_server.accept
   counter = 0
+
   loop do
-  puts "Ready for a request"
+
+  puts "Ready for a request" # output method
   request_lines = []
   while line = client.gets and !line.chomp.empty?
     request_lines << line.chomp
-  end
+  end # server parsing method
     counter +=1
 
   puts "******************Got this request:*******************"
@@ -59,6 +61,7 @@ if __FILE__ == $0
   }
 
   #process request
+
   case d['Path']
   	when '/'
   		puts '/ detected'
