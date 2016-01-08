@@ -15,7 +15,7 @@ class OutputTest < Minitest::Test
     @client = Hurley::Client.new "http://127.0.0.1:9292"
   end
 
-  def test_response
+  def test_succesful_response_to_server
     response = @client.get("http://127.0.0.1:9292")
     assert response.success?
     assert_equal "127.0.0.1", @client.host
@@ -63,7 +63,7 @@ class OutputTest < Minitest::Test
     response = @client.get("http://127.0.0.1:9292/word_search?word=TrOlLiee")
     assert_match "TROLLIEE is not a known word", response.body
     assert_equal 200, response.status_code
-  end=
+  end
 
 
 end
