@@ -1,4 +1,4 @@
-require './constants'
+require './lib/constants'
 
 
 module Responder

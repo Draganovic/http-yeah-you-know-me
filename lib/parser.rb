@@ -1,5 +1,5 @@
 require 'socket'
-require './output'
+require './lib/output'
 
 class Parser
   attr_reader :diagnostic

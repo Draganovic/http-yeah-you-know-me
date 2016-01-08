@@ -1,25 +1,12 @@
-# require 'server'
-# require 'minitest/pride'
-# require 'minitest/autorun'
-#
-#
-# class ServerTest < Minitest::Test
-#
-#   def test_it_is_a_server_object
-#     s = Server.new
-#     assert s
-#   end
-#
-# end
 require 'minitest/autorun'
 require 'minitest/pride'
 require 'hurley'
 require 'socket'
-require './lib/server'
+require './lib/web_server'
 require 'hurley/addressable'
 
 
-class ServerTest < Minitest::Test
+class WebServerTest < Minitest::Test
 
  attr_reader :client
 

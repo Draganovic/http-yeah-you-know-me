@@ -1,6 +1,6 @@
 require 'socket'
-require './parser'
-require './processor'
+require './lib/parser'
+require './lib/processor'
 
 
 class WebServer
@@ -25,5 +25,6 @@ class WebServer
   end
 
 end
-
+if __FILE__ == $0
 server = WebServer.new
+end

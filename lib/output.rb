@@ -1,14 +1,41 @@
-require './processor'
-require './responder'
+require './lib/processor'
+require './lib/responder'
+require './lib/constants'
 
 
 class Output
 
+  include Constants
   extend Responder
 
   DEBUG = true
   def self.print(msg)
     puts msg if DEBUG == true
+  end
+
+  def self.validate_time(client)
+    response(client, Time.now.strftime('%I:%M %p on %A, %B %e, %Y'))
+  end
+
+  def self.hello(client, request)
+    response(client, "Hello World #{request}")
+  end
+
+  def self.debug_info(client,request)
+    response(client, request.collect{ |k,v| "#{k}: #{v}" }.join("\n"))
+  end
+
+  def self.turn_off(client,request)
+    response(client, "Total Requests : #{request}")
+    exit
+  end
+
+  def self.destruct(client,request)
+    begin
+      raise SystemStackError
+    rescue SystemStackError => error
+      response(client, request.collect{ |k,v| "#{k}: #{v}" }.join("\n"),STATUS_ERROR)
+    end
   end
 
   def self.word_finder(client,request)
@@ -26,4 +53,7 @@ class Output
     }
     response(client,msg)
   end
+
+
+
 end
