@@ -32,9 +32,9 @@ class Output
 
   def self.destruct(client,request)
     begin
-      raise SystemStackError
-    rescue SystemStackError => error
-      response(client, request.collect{ |k,v| "#{k}: #{v}" }.join("\n"),STATUS_ERROR)
+      raise SystemStackError, "Whoops..."
+    rescue SystemStackError
+      response(client, "#{error.class} : #{error.message}<br>" + error.backtrace.join('<br>'),STATUS_ERROR)
     end
   end
 
@@ -44,13 +44,14 @@ class Output
     contents = File.readlines('/usr/share/dict/words').map(&:chomp!)
     h.each{ |word,param|
       next unless param.downcase == 'word'
-      x = contents.one? {|w| w == word}
+      x = contents.one? {|w| w.downcase == word.downcase}
       if x == true
-        msg += "#{word.upcase} is a known word\n"
+        msg = msg + "#{word.upcase} is a known word\n"
       else
-        msg += "#{word.upcase} is not a known word\n"
+        msg = msg + "#{word.upcase} is not a known word\n"
       end
     }
+    Output.print "msg = #{msg}"
     response(client,msg)
   end
 
