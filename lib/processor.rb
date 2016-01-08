@@ -24,6 +24,7 @@ class Processor
       @game.start_game(client,request)
 
     when '/game'
+      Output.print('/game detected')
       @game.riddler(client,request)
 
     when '/new_game'

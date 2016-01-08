@@ -6,6 +6,8 @@ class Game
   include Constants
   include Responder
 
+  attr_reader :num_to_guess
+
   def initialize
     @start = 0
     reset_game
@@ -40,7 +42,7 @@ class Game
   end
 
   def has_game?
-    Output.print "has_game? -- @start = #{@start}"
+    # Output.print "has_game? -- @start = #{@start}"
     return @start == 1
   end
 
@@ -60,13 +62,15 @@ class Game
   end
 
   def riddler(client,request)
-    Output.print "inside riddler"
+    # Output.print "inside riddler"
     if request['Verb'].upcase == 'POST'
+      #the_game
       Output.print "inside POST"
       if has_game?
         Output.print "inside has_game? -- yes"
         post_guess(request['guess'])
-        msg = "Redirecting to GET /game. " + STATUS_REDIRECT
+        #msg = "Redirecting to GET /game. " + STATUS_REDIRECT
+        msg = '/game'
         status = STATUS_REDIRECT
       else
         Output.print "inside has_game? -- no"
@@ -78,7 +82,7 @@ class Game
       msg = the_game
       status = STATUS_OK
     end
-    Output.print "before response"
+    Output.print "before response, msg = #{msg}, status = #{status}"
     response(client,msg,status)
   end
 

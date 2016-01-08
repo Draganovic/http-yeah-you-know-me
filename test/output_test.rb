@@ -2,7 +2,6 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'hurley'
 require 'socket'
-require './lib/web_server'
 require './lib/processor'
 require './lib/responder'
 require './lib/constants'
@@ -64,21 +63,7 @@ class OutputTest < Minitest::Test
     response = @client.get("http://127.0.0.1:9292/word_search?word=TrOlLiee")
     assert_match "TROLLIEE is not a known word", response.body
     assert_equal 200, response.status_code
-  end
-
-  # def test_word_finder_in_dictionary_can_find_more_then_one_word
-  #   @client.request_options.query_class = Hurley::Query::Flat
-  #   response = @client.get("http://127.0.0.1:9292/word_search?word=Trolliee&word=Troll&word=Goblin")
-  #   assert_match "TROLLIEE is not a known word", response.body
-  #   assert_match "TROLL is a known word", response.body
-  #   assert_match "GOBLIN is a known word", response.body
-  #   assert_equal 200, response.status_code
-  # end
+  end=
 
 
-
-  # def test_self_destruct_works
-  #   response = @client.get("http://127.0.0.1:9292/force_error")
-  #   assert_equal 500, response.status_code
-  # end
 end

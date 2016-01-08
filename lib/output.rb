@@ -33,7 +33,7 @@ class Output
   def self.destruct(client,request)
     begin
       raise SystemStackError, "Whoops..."
-    rescue SystemStackError
+    rescue SystemStackError => error
       response(client, "#{error.class} : #{error.message}<br>" + error.backtrace.join('<br>'),STATUS_ERROR)
     end
   end
